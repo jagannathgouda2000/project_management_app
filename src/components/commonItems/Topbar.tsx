@@ -4,7 +4,7 @@ import Link from "next/link";
 import Login from "../Login";
 import { UserMenu } from "./UserMenu";
 
-const Topnav = () => {
+const Topbar = () => {
   const { data } = useSession();
 
   return (
@@ -24,4 +24,4 @@ const Topnav = () => {
   );
 };
 
-export default Topnav;
+export default Topbar;
