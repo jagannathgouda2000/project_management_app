@@ -1,14 +1,12 @@
-import { type Session } from "next-auth";
+import { ThemeProvider } from "@/components/theme-provider";
+import "@/styles/globals.css";
+import type { Page } from "@/types/page";
+import { api } from "@/utils/api";
 import { SessionProvider } from "next-auth/react";
-import { type AppType } from "next/app";
+import type { AppProps } from "next/app";
 import { Inter } from "next/font/google";
 import Head from "next/head";
-import { api } from "@/utils/api";
-import type { AppProps } from "next/app";
-import type { Page } from "@/types/page";
-import "@/styles/globals.css";
 import { Fragment } from "react";
-import { ThemeProvider } from "@/components/theme-provider";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",

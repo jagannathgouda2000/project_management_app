@@ -1,5 +1,4 @@
 import React from "react";
-import Sidebar from "@/components/commonItems/Sidebar";
 import Navbar from "../commonItems/NavBar";
 
 const Layout = ({

@@ -22,23 +22,27 @@ export default function Navbar() {
         <Link href="/">
           <div className="flex gap-3">
             <Rabbit className="rounded-full text-white" />
-            <p className="font-bold ">PM BUDDY</p>{" "}
+            <p className="hidden font-bold md:block">PM BUDDY</p>{" "}
           </div>
         </Link>
+
         <div className="flex items-center justify-end gap-2">
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
             return (
-              <div key={item.label} className="mr-4">
+              <div
+                key={item.label}
+                className="flex items-center justify-center rounded-full p-2 dark:bg-black md:mr-2"
+              >
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Link href={item.link} key={item.label}>
-                        <Icon />
+                      <Link href={item.link}>
+                        <Icon className="h-4 w-4 md:h-6 md:w-6" />
                       </Link>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Add to library</p>
+                      <p>{item.label}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
