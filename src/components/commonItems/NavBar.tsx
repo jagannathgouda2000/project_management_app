@@ -17,7 +17,7 @@ export default function Navbar() {
   const { data } = useSession();
   const user = data?.user;
   return (
-    <nav className="sticky top-4 z-10 col-span-full flex h-[60px] w-full items-center justify-center rounded-full bg-white/30 py-2 backdrop-blur-sm md:col-span-10 md:col-start-2 md:px-4">
+    <nav className="sticky top-4 z-10 col-span-full flex h-[60px] w-full items-center justify-center rounded-full bg-white/30 py-2 backdrop-blur-sm md:px-4">
       <div className="container mx-auto flex items-center justify-between">
         <Link href="/">
           <div className="flex gap-3">

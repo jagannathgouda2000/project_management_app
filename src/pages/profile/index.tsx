@@ -1,40 +1,84 @@
-import UserNotFound from '@/components/commonItems/UserNotFound';
-import { getServerAuthSession } from '@/server/auth';
-import Layout from '@/components/layout/Layout';
-import { GetServerSidePropsContext } from 'next';
-import { useSession } from 'next-auth/react';
-import React, { ReactElement } from 'react'
+import UserNotFound from "@/components/commonItems/UserNotFound";
+import { getServerAuthSession } from "@/server/auth";
+import Layout from "@/components/layout/Layout";
+import { GetServerSidePropsContext } from "next";
+import { useSession } from "next-auth/react";
+import React, { ReactElement, useEffect, useState } from "react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Session } from "next-auth";
+import { cn } from "@/lib/utils";
 
-const Profile = () => {
-    const { data } = useSession();
-    console.log(data);
-    if (!data) return <UserNotFound />
-    return (
-        <div>
-            Profile
-        </div>
-    )
-}
-
-
-Profile.getLayout = function getLayout(page: ReactElement) {
-    return <Layout>{page}</Layout>;
+const LoadingProfilePage = () => {
+  return <div>{/*  */}</div>;
 };
 
-export async function getServerSideProps({
-    req,
-    res,
-}: {
-    req: GetServerSidePropsContext["req"];
-    res: GetServerSidePropsContext["res"];
-}) {
-    const session = await getServerAuthSession({
-        req,
-        res,
-    });
-    return {
-        props: { user: session?.user ?? null }, // Will be passed to the page component as props
-    };
-}
+const Profile = () => {
+  const { data, status } = useSession();
+  const isLoadingSession = status === "loading";
 
-export default Profile
+  const userData = data?.user;
+  const [user, setUser] = useState<Session["user"] | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (userData) {
+      setUser(userData);
+    }
+  }, [userData]);
+
+  if (isLoadingSession) return <LoadingProfilePage />;
+  if (!data) return <UserNotFound />;
+  return (
+    <div>
+      <h1 className="mb-4 text-3xl font-medium">Profile</h1>
+      <div className="flex flex-col gap-4">
+        <Label>
+          <p className="ml-3 pb-2">Name</p>
+          <Input
+            type="text"
+            className={cn(
+              isEditing ? "" : "border-0 focus-visible:ring-transparent",
+            )}
+            readOnly={!isEditing}
+            value={user?.name || ""}
+            onChange={(e) => {
+              //   setUser((prev) => ({ ...prev, name: e.target.value }));
+            }}
+          />
+        </Label>
+        <Label>
+          <p className="ml-3 pb-2">Email</p>
+          <Input
+            type="text"
+            readOnly={!isEditing}
+            className=""
+            value={user?.email || ""}
+          />
+        </Label>
+      </div>
+    </div>
+  );
+};
+
+Profile.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
+};
+
+// export async function getServerSideProps({
+//   req,
+//   res,
+// }: {
+//   req: GetServerSidePropsContext["req"];
+//   res: GetServerSidePropsContext["res"];
+// }) {
+//   const session = await getServerAuthSession({
+//     req,
+//     res,
+//   });
+//   return {
+//     props: { user: session?.user ?? null }, // Will be passed to the page component as props
+//   };
+// }
+
+export default Profile;
