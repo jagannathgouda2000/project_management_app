@@ -3,24 +3,24 @@ import { UserMenu } from "./UserMenu";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import Login from "../Login";
+import { Rabbit } from "lucide-react";
 
 // components/Navbar.tsx
 export default function Navbar() {
-    const { data } = useSession();
-    const user = data?.user;
-    return (
-        <nav className="bg-primary py-4">
-            <div className="container mx-auto flex justify-between items-center">
-                <Link href="/">
-                    <div className="flex gap-3"><Image src="/images/7.jpg" alt="logo" width={28} height={28} />
-                        <p className="text-white text-xl font-bold">PM BUDDY</p>    </div>
-
-                </Link>
-                <Login />
-                <UserMenu />
-            </div>
-        </nav>
-    );
-};
-
-
+  const { data } = useSession();
+  const user = data?.user;
+  return (
+    <nav className="sticky top-4 z-10 mx-auto w-full max-w-5xl rounded-full bg-white/30 px-4 py-2 backdrop-blur-sm">
+      <div className="container mx-auto flex items-center justify-between">
+        <Link href="/">
+          <div className="flex gap-3">
+            <Rabbit className="rounded-full text-white" />
+            <p className="font-bold text-white">PM BUDDY</p>{" "}
+          </div>
+        </Link>
+        <Login />
+        <UserMenu />
+      </div>
+    </nav>
+  );
+}

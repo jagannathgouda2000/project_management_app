@@ -10,7 +10,7 @@ const Layout = ({
   hideSidebar?: boolean;
 }) => {
   return (
-    <div className="flex flex-col">
+    <div className="relative flex flex-col">
       <Navbar />
       <div className="flex">
         <div className={`flex-shrink-0 ${hideSidebar ? "hidden" : ""}`}>
