@@ -8,6 +8,7 @@ import type { AppProps } from "next/app";
 import type { Page } from "@/types/page";
 import "@/styles/globals.css";
 import { Fragment } from "react";
+import { ThemeProvider } from "@/components/theme-provider";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -30,9 +31,16 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: Props) => {
         />
         <link rel="icon" href="/logo.svg" />
       </Head>
-      <main className={`${inter.variable} min-h-screen`}>
-        <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
-      </main>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="dark"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <main className={`${inter.variable} min-h-screen`}>
+          <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
+        </main>
+      </ThemeProvider>
     </SessionProvider>
   );
 };

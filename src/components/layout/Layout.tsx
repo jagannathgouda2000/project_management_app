@@ -10,13 +10,11 @@ const Layout = ({
   hideSidebar?: boolean;
 }) => {
   return (
-    <div className="relative flex flex-col">
+    <div className="relative grid grid-cols-12">
       <Navbar />
-      <div className="flex">
-        <div className={`flex-shrink-0 ${hideSidebar ? "hidden" : ""}`}>
-          <Sidebar />
-        </div>
-        <div className="grow">{children}</div>
+
+      <div className="col-span-full md:col-span-10 md:col-start-2">
+        <div className="pt-14">{children}</div>
       </div>
     </div>
   );
