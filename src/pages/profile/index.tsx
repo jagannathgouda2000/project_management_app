@@ -10,6 +10,9 @@ import { Session } from "next-auth";
 import { cn } from "@/lib/utils";
 import { api } from "@/utils/api";
 import Header from "@/components/commonItems/Header";
+import { Button } from "@/components/ui/button";
+import { UserType } from "@/types/user";
+import { toast } from "@/components/ui/use-toast";
 
 const LoadingProfilePage = () => {
   return <div>{/*  */}</div>;
@@ -20,34 +23,82 @@ const Profile = () => {
   const isLoadingSession = status === "loading";
 
   const userData = data?.user;
-  const [user, setUser] = useState<Session["user"] | null>(null);
-  const [isEditing, setIsEditing] = useState(true);
+  const userName = userData?.name;
+  const userEmail = userData?.email;
+
+  const [name, setName] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
   const userUpdateMutation = api.profile.updateUser.useMutation();
+
   useEffect(() => {
-    if (userData) {
-      setUser(userData);
+    if (userName) {
+      setName(userName);
     }
-  }, [userData]);
+  }, [userName]);
+
+  const updateUser = async (name: string) => {
+    if (!name) {
+      toast({ title: "user name cant be empty." });
+    }
+    try {
+      await userUpdateMutation.mutateAsync({ name: name.trim() });
+      console.log("user updated successfully");
+    } catch (err: any) {
+      console.log(err, "err");
+    } finally {
+      setIsEditing(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log(data);
+  });
+
+  function handleProfileChanges() {
+    if (!isEditing) return;
+    if (name !== null) {
+      updateUser(name);
+    }
+  }
 
   if (isLoadingSession) return <LoadingProfilePage />;
-  if (!data) return <UserNotFound />;
+  if (!userName || !userEmail) return <UserNotFound />;
 
-  const updateUser = async(user:Session["user"]) => {
-      if(!user?.name){
-        console.log("user name cant be empty.")
-      }
-      try{
-        await userUpdateMutation.mutateAsync({name: user.name!});
-        console.log("user updated successfully")
-      }catch(err:any){
-        console.log(err,"err")
-      }finally{
-        setIsEditing(false)
-      }
-  }
   return (
     <div>
-      <Header title={"Profile"} subtitle={"You can view and edit your profile here."} />
+      <div className="mb-4 flex flex-col md:mb-8 md:flex-row md:items-center md:justify-between">
+        <Header title={"Profile"} subtitle={"Manage your profile settings."} />
+        {isEditing ? (
+          <div className="flex items-center gap-4">
+            <Button
+              onClick={() => {
+                if (userName) {
+                  setName(userName);
+                  setIsEditing(false);
+                }
+              }}
+              className="grow px-8 md:grow-0"
+            >
+              <span className="font-bold">Cancel</span>
+            </Button>
+            <Button
+              onClick={handleProfileChanges}
+              className="grow px-8 md:grow-0"
+            >
+              <span className="font-bold">Save</span>
+            </Button>
+          </div>
+        ) : (
+          <Button
+            onClick={() => {
+              setIsEditing(true);
+            }}
+            className="px-8"
+          >
+            <span className="font-bold">Edit</span>
+          </Button>
+        )}
+      </div>
       <div className="flex flex-col gap-4">
         <Label>
           <p className="ml-3 pb-2">Name</p>
@@ -57,14 +108,9 @@ const Profile = () => {
               isEditing ? "" : "border-0 focus-visible:ring-transparent",
             )}
             readOnly={!isEditing}
-            value={user?.name || ""}
+            value={name ?? ""}
             onChange={(e) => {
-                setUser((prev) => {
-                  return {
-                    ...prev,
-                    name: e.target.value,
-                  }
-                });
+              setName(e.target.value);
             }}
           />
         </Label>
@@ -72,12 +118,11 @@ const Profile = () => {
           <p className="ml-3 pb-2">Email</p>
           <Input
             type="text"
-            readOnly={!isEditing}
-            className=""
-            value={user?.email || ""}
+            className={cn("border-0 focus-visible:ring-transparent")}
+            readOnly
+            value={userEmail}
           />
         </Label>
-
       </div>
     </div>
   );
