@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Session } from "next-auth";
 import { cn } from "@/lib/utils";
+import { api } from "@/utils/api";
+import Header from "@/components/commonItems/Header";
 
 const LoadingProfilePage = () => {
   return <div>{/*  */}</div>;
@@ -19,8 +21,8 @@ const Profile = () => {
 
   const userData = data?.user;
   const [user, setUser] = useState<Session["user"] | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
-
+  const [isEditing, setIsEditing] = useState(true);
+  const userUpdateMutation = api.profile.updateUser.useMutation();
   useEffect(() => {
     if (userData) {
       setUser(userData);
@@ -29,9 +31,23 @@ const Profile = () => {
 
   if (isLoadingSession) return <LoadingProfilePage />;
   if (!data) return <UserNotFound />;
+
+  const updateUser = async(user:Session["user"]) => {
+      if(!user?.name){
+        console.log("user name cant be empty.")
+      }
+      try{
+        await userUpdateMutation.mutateAsync({name: user.name!});
+        console.log("user updated successfully")
+      }catch(err:any){
+        console.log(err,"err")
+      }finally{
+        setIsEditing(false)
+      }
+  }
   return (
     <div>
-      <h1 className="mb-4 text-3xl font-medium">Profile</h1>
+      <Header title={"Profile"} subtitle={"You can view and edit your profile here."} />
       <div className="flex flex-col gap-4">
         <Label>
           <p className="ml-3 pb-2">Name</p>
@@ -43,7 +59,12 @@ const Profile = () => {
             readOnly={!isEditing}
             value={user?.name || ""}
             onChange={(e) => {
-              //   setUser((prev) => ({ ...prev, name: e.target.value }));
+                setUser((prev) => {
+                  return {
+                    ...prev,
+                    name: e.target.value,
+                  }
+                });
             }}
           />
         </Label>
@@ -56,6 +77,7 @@ const Profile = () => {
             value={user?.email || ""}
           />
         </Label>
+
       </div>
     </div>
   );
