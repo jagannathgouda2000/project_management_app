@@ -8,7 +8,7 @@ import {
 import { title } from "process";
 import { TRPCError } from "@trpc/server";
 
-export const projectRoute = createTRPCRouter({
+export const projectRouter = createTRPCRouter({
   createProject: protectedProcedure
     .input(
       z.object({
