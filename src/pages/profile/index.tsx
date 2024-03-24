@@ -52,7 +52,7 @@ const Profile = () => {
 
   useEffect(() => {
     console.log(data);
-  });
+  }); 
 
   function handleProfileChanges() {
     if (!isEditing) return;

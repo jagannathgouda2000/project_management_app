@@ -1,0 +1,77 @@
+import { z } from "zod";
+
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { TRPCError } from "@trpc/server";
+
+export const connectionRequest = createTRPCRouter({
+  sendRequest: protectedProcedure
+    .input(z.object({ email: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const sendingUser = ctx.session.user;
+      const receivingUser = await ctx.db.user.findUnique({
+        where: { email: input.email },
+      });
+
+      if (sendingUser.email === receivingUser?.email) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Sender and receiver cant be same.",
+        });
+      }
+
+      if (!receivingUser) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "User with this email not found",
+        });
+      }
+
+      const pendingRequest = await ctx.db.connectionRequest.findFirst({
+        where: {
+          status: "pending",
+          OR: [
+            {
+              fromId: sendingUser.id,
+              toId: receivingUser.id,
+            },
+            {
+              fromId: receivingUser.id,
+              toId: sendingUser.id,
+            },
+          ],
+        },
+      });
+      if (pendingRequest) {
+        if (pendingRequest.fromId === sendingUser.id) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Request alrready in pending",
+          });
+        } else {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "You already get a connection request from the user",
+          });
+        }
+      }
+      const response = await ctx.db.connectionRequest.create({
+        data: {
+          fromId: sendingUser.id,
+          toId: receivingUser.id,
+        },
+      });
+      return response;
+    }),
+  members: protectedProcedure
+  .query(async({ctx,input}) => {
+    const user = ctx.session.user;
+    if (!user) {
+        throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Session expired, Please Login Again.",
+          });
+    }
+    
+
+  })
+});
