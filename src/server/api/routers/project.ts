@@ -120,7 +120,7 @@ export const projectRouter = createTRPCRouter({
           description: input.description,
           createdById: user.id,
           members: {
-            connect: input.members.map((id) => ({ id })),
+            set: input.members.map((id) => ({ id })),
           },
         },
       });
