@@ -13,6 +13,9 @@ const config = {
   rules: {
     // These opinionated rules are enabled in stylistic-type-checked above.
     // Feel free to reconfigure them to your own preference.
+    "react/no-unescaped-entities" : "off"   ,
+    "@typescript-eslint/no-explicit-any" : "off" ,
+      "@typescript-eslint/no-floating-promises" : "off" ,
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-unsafe-assignment": "off",

@@ -59,7 +59,7 @@ const Profile = () => {
     if (name !== null) {
       updateUser(name);
     }
-  }
+  } 
 
   if (isLoadingSession) return <LoadingProfilePage />;
   if (!userName || !userEmail) return <UserNotFound />;
