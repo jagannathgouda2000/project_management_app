@@ -5,7 +5,6 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
-import { title } from "process";
 import { TRPCError } from "@trpc/server";
 
 export const projectRouter = createTRPCRouter({
