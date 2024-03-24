@@ -92,15 +92,23 @@ export const connectionRequest = createTRPCRouter({
     });
     return connections;
   }),
-  sendFriendRequestResponse: protectedProcedure
+  sendConnectionResponse: protectedProcedure
     .input(z.object({ response: z.boolean(), reqId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-        const response = await ctx.db.connectionRequest.update({
-          where:{id : input.reqId, status:"pending"},
-          data: {
-             status : input?.response ? "accepted" : "rejected"
-          }
-        })
-        return response
+      const response = await ctx.db.connectionRequest.update({
+        where: { id: input.reqId, status: "pending" },
+        data: {
+          status: input?.response ? "accepted" : "rejected",
+        },
+      });
+      return response;
+    }),
+  deleteConnection: protectedProcedure
+    .input(z.object({ reqId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const response = await ctx.db.connectionRequest.delete({
+        where: { id: input.reqId },
+      });
+      return response;
     }),
 });
