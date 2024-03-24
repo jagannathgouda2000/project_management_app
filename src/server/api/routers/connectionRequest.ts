@@ -62,16 +62,45 @@ export const connectionRequest = createTRPCRouter({
       });
       return response;
     }),
-  members: protectedProcedure
-  .query(async({ctx,input}) => {
+  getConnections: protectedProcedure.query(async ({ ctx }) => {
     const user = ctx.session.user;
     if (!user) {
-        throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "Session expired, Please Login Again.",
-          });
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Session expired, Please Login Again.",
+      });
     }
-    
-
-  })
+    const connections = await ctx.db.connectionRequest.findMany({
+      where: {
+        status: "pending",
+        OR: [
+          {
+            fromId: user.id,
+          },
+          {
+            toId: user.id,
+          },
+        ],
+      },
+      include: {
+        from: true,
+        to: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return connections;
+  }),
+  sendFriendRequestResponse: protectedProcedure
+    .input(z.object({ response: z.boolean(), reqId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+        const response = await ctx.db.connectionRequest.update({
+          where:{id : input.reqId, status:"pending"},
+          data: {
+             status : input?.response ? "accepted" : "rejected"
+          }
+        })
+        return response
+    }),
 });
