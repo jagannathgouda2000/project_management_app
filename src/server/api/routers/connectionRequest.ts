@@ -72,6 +72,30 @@ export const connectionRequest = createTRPCRouter({
     }
     const connections = await ctx.db.connectionRequest.findMany({
       where: {
+        status: "accepted",
+        OR: [
+          {
+            fromId: user.id,
+          },
+          {
+            toId: user.id,
+          },
+        ],
+      },
+      include: {
+        from: true,
+        to: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return connections
+  }),
+  getPendingRequest: protectedProcedure.query(async ({ ctx }) => {
+    const user = ctx.session.user
+    const connections = await ctx.db.connectionRequest.findMany({
+      where: {
         status: "pending",
         OR: [
           {
@@ -90,7 +114,12 @@ export const connectionRequest = createTRPCRouter({
         createdAt: "desc",
       },
     });
-    return connections;
+    return connections.map((connection) => {
+      return {
+        ...connection,
+        received: connection.toId === user.id
+      }
+    });
   }),
   sendConnectionResponse: protectedProcedure
     .input(z.object({ response: z.boolean(), reqId: z.string() }))
