@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 export async function handleGitLogin() {
   try {
     await signIn("github", {
-      callbackUrl: `${window.location.origin}/dashboard`,
+      callbackUrl: process.env.NEXT_PUBLIC_LOGIN_REDIRECT,
     });
   } catch (e) {
     console.log(e);
