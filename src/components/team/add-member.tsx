@@ -16,7 +16,7 @@ import { api } from "@/utils/api";
 import { useState } from "react";
 import { toast } from "../ui/use-toast";
 
-export function AddMember() {
+export function AddMember({requestRefetch}:{requestRefetch:any}) {
   const [email, setEmail] = useState("");
   const sendConnectionRequestMutation = api.members.sendRequest.useMutation();
 
@@ -29,6 +29,7 @@ export function AddMember() {
       })
       .then((res: any) => {
         console.log(res);
+        requestRefetch();
         toast({ title: "Request sent successfully" });
       })
       .catch((err: any) => {

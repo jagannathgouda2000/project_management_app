@@ -85,12 +85,6 @@ export const projectRouter = createTRPCRouter({
           createdBy: true,
         },
       });
-      if (!project) {
-        return new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Project not found.",
-        });
-      }
       return project;
     }),
   updateProject: protectedProcedure

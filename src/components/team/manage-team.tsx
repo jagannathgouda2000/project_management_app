@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TeamMembers from "./team-members";
 import { AddMember } from "./add-member";
 import MemberRequests from "./member-requests";
+import React, { useRef } from "react";
 
 const ManageTeam = ({
   userName,
@@ -19,6 +20,14 @@ const ManageTeam = ({
   userEmail: string;
   userId: string;
 }) => {
+  const ref = useRef<any>(null);
+  console.log(ref, "hello")
+  function requestRefetch() {
+    if (ref && ref.current) {
+       ref?.current?.refetchRequest()
+    }
+
+  }
   return (
     <Tabs defaultValue="members" className="mb-10 mt-4 md:mb-20">
       <TabsList className="grid w-full grid-cols-2">
@@ -35,7 +44,7 @@ const ManageTeam = ({
                   Make changes to your team here.
                 </CardDescription>
               </div>
-              <AddMember />
+              <AddMember requestRefetch={requestRefetch} />
             </div>
           </CardHeader>
           <CardContent className="space-y-2 p-4 md:p-6">
@@ -51,11 +60,11 @@ const ManageTeam = ({
                 <CardTitle>Requests</CardTitle>
                 <CardDescription>Manage your requests.</CardDescription>
               </div>
-              <AddMember />
+              <AddMember requestRefetch={requestRefetch} />
             </div>
           </CardHeader>
           <CardContent className="space-y-2">
-            <MemberRequests />
+            <MemberRequests ref={ref} />
           </CardContent>
         </Card>
       </TabsContent>

@@ -1,6 +1,6 @@
 import { api } from "@/utils/api";
 import { format } from "date-fns";
-import React, { useState } from "react";
+import React, { useImperativeHandle, useState } from "react";
 import { Badge } from "../ui/badge";
 import { Skeleton } from "../ui/skeleton";
 import { Toggle } from "../ui/toggle";
@@ -40,7 +40,7 @@ const MemberRequestDialog = ({
   title = "",
   memberEmail = "",
   triggerVariant = "default",
-  handleClick = () => {},
+  handleClick = () => { },
 }: {
   title: string;
   memberEmail: string;
@@ -70,7 +70,9 @@ const MemberRequestDialog = ({
   );
 };
 
-const MemberRequests = () => {
+
+
+const MemberRequests = React.forwardRef((props, ref) => {
   const {
     data: memberRequests,
     isLoading,
@@ -102,7 +104,11 @@ const MemberRequests = () => {
   }
 
   const [showRejectedRequests, setShowRejectedRequests] = useState(false);
-
+  useImperativeHandle(ref, () => {
+    return {
+      refetchRequest: refetch
+    }
+  })
   if (isLoading) return <LoadingList />;
   if (!memberRequests) return <ErrorFetchingData />;
   const formattedRequests = memberRequests
@@ -116,6 +122,8 @@ const MemberRequests = () => {
         return -1;
       } else return 1;
     });
+
+
   return (
     <div>
       <div className="mb-4">
@@ -192,6 +200,6 @@ const MemberRequests = () => {
       </div>
     </div>
   );
-};
+});
 
 export default MemberRequests;
