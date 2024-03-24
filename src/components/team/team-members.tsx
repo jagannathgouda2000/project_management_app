@@ -1,10 +1,5 @@
-import { CircleX } from "lucide-react";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import React, { useRef } from "react";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -14,19 +9,43 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { api } from "@/utils/api";
+import { CircleX } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { useRef } from "react";
+import { toast } from "../ui/use-toast";
+import LoadingList from "../commonItems/LoadingList";
 
-const MOCK_USERS = [
-  { name: "Jaga", email: "jaga@gmail.commmmmmmmmmmmm" },
-  { name: "Jaga", email: "jaga@gmail1.com" },
-  { name: "Jaga", email: "jaga@gmail2.com" },
-  { name: "Jaga", email: "jaga@gmail3.com" },
-];
-
-const RemoveMember = ({ member }: { member: any }) => {
-  const closePopupRef = useRef(null);
+const RemoveMember = ({
+  member,
+  reqId,
+  refetchMembers,
+}: {
+  member: any;
+  reqId: string;
+  refetchMembers: () => void;
+}) => {
+  const closePopupRef = useRef<null | HTMLButtonElement>(null);
+  const removeMemberMutation = api.members.deleteConnection.useMutation();
 
   async function handleRemoveMember() {
-    //
+    await removeMemberMutation
+      .mutateAsync({ reqId })
+      .then((res) => {
+        toast({ title: "Removed member successfully" });
+      })
+      .catch((err: any) => {
+        toast({
+          title: "Unexpected error",
+          description: err.message ?? "",
+          variant: "destructive",
+        });
+      })
+      .finally(() => {
+        refetchMembers();
+        closePopupRef.current?.click();
+      });
   }
   return (
     <AlertDialog>
@@ -60,30 +79,56 @@ const RemoveMember = ({ member }: { member: any }) => {
 const TeamMembers = () => {
   const { data } = useSession();
   const user = data?.user;
-  const userImage = user?.image;
+
+  const {
+    data: teamMembers,
+    isLoading,
+    refetch,
+    isError,
+  } = api.members.getConnections.useQuery(undefined, {
+    enabled: !!user,
+  });
   //   const
+  if (isLoading) return <LoadingList />;
+  if (isError) return <div>Error fetching data</div>;
+
+  const showTeamMembers = teamMembers && teamMembers?.length > 0;
   return (
     <div className="space-y-4">
-      {MOCK_USERS.map((member) => {
-        return (
-          <div key={member.email} className="flex items-center gap-4 truncate">
-            {userImage && (
-              <Image
-                src={userImage}
-                alt={member.email}
-                className="h-6 w-6 rounded-full md:h-12 md:w-12"
-                width={48}
-                height={48}
+      {showTeamMembers ? (
+        teamMembers.map((k) => {
+          const member = k.member;
+          return (
+            <div key={k.id} className="flex items-center gap-4 truncate">
+              {member.image && (
+                <Image
+                  src={member.image}
+                  alt={member.email!}
+                  className="h-6 w-6 rounded-full md:h-12 md:w-12"
+                  width={48}
+                  height={48}
+                />
+              )}
+              <div className="max-w-[200px]">
+                <p>{member.name}</p>
+                <p className="text-xs md:text-base">{member.email}</p>
+              </div>
+              <RemoveMember
+                member={member}
+                reqId={k.id}
+                refetchMembers={() => {
+                  refetch();
+                }}
               />
-            )}
-            <div className="max-w-[200px]">
-              <p>{member.name}</p>
-              <p className="text-xs md:text-base">{member.email}</p>
             </div>
-            <RemoveMember member={member} />
-          </div>
-        );
-      })}
+          );
+        })
+      ) : (
+        <div className="text-center text-sm text-gray-400">
+          <div>No members found</div>
+          <div>Add a member to view here.</div>
+        </div>
+      )}
     </div>
   );
 };

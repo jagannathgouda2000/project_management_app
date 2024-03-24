@@ -1,7 +1,7 @@
 import Header from "@/components/commonItems/Header";
 import UserNotFound from "@/components/commonItems/UserNotFound";
 import Layout from "@/components/layout/Layout";
-import ManageTeam from "@/components/team/ManageTeam";
+import ManageTeam from "@/components/team/manage-team";
 import { getServerAuthSession } from "@/server/auth";
 import { UserType } from "@/types/user";
 import { GetServerSidePropsContext } from "next";

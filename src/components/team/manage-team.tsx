@@ -7,6 +7,8 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TeamMembers from "./team-members";
+import { AddMember } from "./add-member";
+import MemberRequests from "./member-requests";
 
 const ManageTeam = ({
   userName,
@@ -18,7 +20,7 @@ const ManageTeam = ({
   userId: string;
 }) => {
   return (
-    <Tabs defaultValue="members" className="mt-4">
+    <Tabs defaultValue="members" className="mb-10 mt-4 md:mb-20">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="members">Members</TabsTrigger>
         <TabsTrigger value="Requests">Requests</TabsTrigger>
@@ -26,8 +28,15 @@ const ManageTeam = ({
       <TabsContent value="members">
         <Card>
           <CardHeader>
-            <CardTitle>Members</CardTitle>
-            <CardDescription>Make changes to your team here.</CardDescription>
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <CardTitle>Members</CardTitle>
+                <CardDescription>
+                  Make changes to your team here.
+                </CardDescription>
+              </div>
+              <AddMember />
+            </div>
           </CardHeader>
           <CardContent className="space-y-2 p-4 md:p-6">
             <TeamMembers />
@@ -37,14 +46,16 @@ const ManageTeam = ({
       <TabsContent value="Requests">
         <Card>
           <CardHeader>
-            <CardTitle>Requests</CardTitle>
-            <CardDescription>.</CardDescription>
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <CardTitle>Requests</CardTitle>
+                <CardDescription>Manage your requests.</CardDescription>
+              </div>
+              <AddMember />
+            </div>
           </CardHeader>
           <CardContent className="space-y-2">
-            {/* <div className="space-y-1">
-              <Label htmlFor="current">Current Requests</Label>
-              <Input id="current" type="Requests" />
-            </div> */}
+            <MemberRequests />
           </CardContent>
         </Card>
       </TabsContent>

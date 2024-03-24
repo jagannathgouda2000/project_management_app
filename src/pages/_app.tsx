@@ -1,4 +1,5 @@
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 import "@/styles/globals.css";
 import type { Page } from "@/types/page";
 import { api } from "@/utils/api";
@@ -38,6 +39,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: Props) => {
         <main className={`${inter.variable} min-h-screen`}>
           <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
         </main>
+        <Toaster />
       </ThemeProvider>
     </SessionProvider>
   );

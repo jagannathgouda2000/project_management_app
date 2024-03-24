@@ -52,14 +52,14 @@ const Profile = () => {
 
   useEffect(() => {
     console.log(data);
-  }); 
+  });
 
   function handleProfileChanges() {
     if (!isEditing) return;
     if (name !== null) {
       updateUser(name);
     }
-  } 
+  }
 
   if (isLoadingSession) return <LoadingProfilePage />;
   if (!userName || !userEmail) return <UserNotFound />;

@@ -90,13 +90,19 @@ export const connectionRequest = createTRPCRouter({
         createdAt: "desc",
       },
     });
-    return connections
+
+    return connections.map(({ from, to, id, status }) => {
+      const member = from.id === user.id ? to : from;
+      return { id, status, member };
+    });
   }),
   getPendingRequest: protectedProcedure.query(async ({ ctx }) => {
-    const user = ctx.session.user
+    const user = ctx.session.user;
     const connections = await ctx.db.connectionRequest.findMany({
       where: {
-        status: "pending",
+        NOT: {
+          status: "accepted",
+        },
         OR: [
           {
             fromId: user.id,
@@ -117,8 +123,8 @@ export const connectionRequest = createTRPCRouter({
     return connections.map((connection) => {
       return {
         ...connection,
-        received: connection.toId === user.id
-      }
+        received: connection.toId === user.id,
+      };
     });
   }),
   sendConnectionResponse: protectedProcedure
