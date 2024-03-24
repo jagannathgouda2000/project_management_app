@@ -42,17 +42,17 @@ const Profile = () => {
     }
     try {
       await userUpdateMutation.mutateAsync({ name: name.trim() });
-      console.log("user updated successfully");
+      toast({ title: "Profile updated successfully." });
     } catch (err: any) {
-      console.log(err, "err");
+      toast({
+        title: "Unexpected error",
+        description: err.message,
+        variant: "destructive",
+      });
     } finally {
       setIsEditing(false);
     }
   };
-
-  useEffect(() => {
-    console.log(data);
-  });
 
   function handleProfileChanges() {
     if (!isEditing) return;

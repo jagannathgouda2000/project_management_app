@@ -7,7 +7,6 @@ import { ReactElement } from "react";
 
 const Dashboard = () => {
   const { data } = useSession();
-  console.log(data);
   if (!data) return <UserNotFound />;
   return <div className="">dashboard</div>;
 };

@@ -15,9 +15,6 @@ import { useRouter } from "next/router";
 async function handleLogout() {
   try {
     await signOut({ callbackUrl: process.env.NEXT_PUBLIC_LOGOUT_REDIRECT });
-    // console.log("hello logout")
-    // const router = useRouter();
-    // router.push("/");
   } catch (err) {
     console.log(err);
   }

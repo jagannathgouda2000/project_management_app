@@ -28,11 +28,9 @@ export function AddMember() {
         email: email.toLowerCase().trim(),
       })
       .then((res: any) => {
-        console.log(res);
         toast({ title: "Request sent successfully" });
       })
       .catch((err: any) => {
-        console.log(err);
         toast({
           title: "Unexpected error",
           description: err.message,
