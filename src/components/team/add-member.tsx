@@ -28,7 +28,6 @@ export function AddMember({requestRefetch}:{requestRefetch:any}) {
         email: email.toLowerCase().trim(),
       })
       .then((res: any) => {
-        console.log(res);
         requestRefetch();
         toast({ title: "Request sent successfully" });
       })

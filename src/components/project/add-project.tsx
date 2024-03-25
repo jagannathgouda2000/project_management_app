@@ -60,7 +60,6 @@ export default function AddProject() {
 
   async function handleCreateProject() {
     if (!project.title || !project.description) return;
-    console.log("here");
     await createProjectMutation
       .mutateAsync({
         title: project.title.trim(),

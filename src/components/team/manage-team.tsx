@@ -21,7 +21,6 @@ const ManageTeam = ({
   userId: string;
 }) => {
   const ref = useRef<any>(null);
-  console.log(ref, "hello")
   function requestRefetch() {
     if (ref && ref.current) {
        ref?.current?.refetchRequest()

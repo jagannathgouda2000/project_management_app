@@ -36,10 +36,6 @@ const AddProjectMembers = ({
     isError,
   } = api.members.getConnections.useQuery();
 
-  useEffect(() => {
-    console.log(showMembersList);
-  });
-
   return (
     <div className="flex items-center gap-4">
       <Label>Select Project Members ( {project?.members?.length} )</Label>

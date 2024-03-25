@@ -8,7 +8,6 @@ import EditProject from './edit-project';
 
 const ProjectDetails = ({ projectId }: { projectId: string }) => {
     const { data: projectData, isLoading,refetch } = api.project.getProjectById.useQuery({ id: projectId });
-    console.log(projectData, "hey") 
     if(isLoading) return <p>Loading.....</p>
     return (
         <>
