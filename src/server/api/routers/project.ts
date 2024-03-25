@@ -6,6 +6,7 @@ import {
   publicProcedure,
 } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
+import Error from "next/error";
 
 export const projectRouter = createTRPCRouter({
   createProject: protectedProcedure
@@ -85,7 +86,13 @@ export const projectRouter = createTRPCRouter({
           createdBy: true,
         },
       });
-      return project;
+      if(!project?.members.some((member) => member.id === user.id)){
+        throw new TRPCError({
+          code:"BAD_REQUEST",
+          message:"Project Not Found"
+        })
+      }
+      return project
     }),
   updateProject: protectedProcedure
     .input(

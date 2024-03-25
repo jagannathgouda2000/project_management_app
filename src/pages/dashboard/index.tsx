@@ -3,6 +3,7 @@ import UserNotFound from "@/components/commonItems/UserNotFound";
 import Layout from "@/components/layout/Layout";
 import AddProject from "@/components/project/add-project";
 import { getServerAuthSession } from "@/server/auth";
+import { api } from "@/utils/api";
 import { GetServerSidePropsContext } from "next";
 import { useSession } from "next-auth/react";
 import { ReactElement } from "react";
@@ -12,6 +13,8 @@ const Dashboard = () => {
   const isLoadingUser = status === "loading";
   if (isLoadingUser) return <div>Loading...</div>;
   if (!data) return <UserNotFound />;
+  const {data:projectData} = api.project.getAllProjectDetails.useQuery();
+  console.log(projectData,"hello")
   return (
     <div className="">
       <div className="mb-4 md:mb-10">

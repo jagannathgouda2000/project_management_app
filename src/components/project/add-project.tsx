@@ -101,7 +101,7 @@ export default function AddProject() {
           <Label>
             Title
             <Input
-              value={project.title}
+              value={project?.title}
               onChange={(e) => {
                 setProject((prev: any) => ({ ...prev, title: e.target.value }));
               }}
@@ -120,7 +120,7 @@ export default function AddProject() {
                   description: e.target.value,
                 }));
               }}
-              value={project.description}
+              value={project?.description}
               type="text"
               placeholder="Add a description"
             />

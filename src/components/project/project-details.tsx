@@ -4,26 +4,18 @@ import Header from '../commonItems/Header';
 import { Card, CardContent } from '../ui/card';
 import ProjectInfo from './projectInfo';
 import { Button } from '../ui/button';
+import EditProject from './edit-project';
 
 const ProjectDetails = ({ projectId }: { projectId: string }) => {
-    const { data: projectData } = api.project.getProjectById.useQuery({ id: projectId });
-    console.log(projectData, "project data")
+    const { data: projectData, isLoading,refetch } = api.project.getProjectById.useQuery({ id: projectId });
+    console.log(projectData, "hey") 
+    if(isLoading) return <p>Loading.....</p>
     return (
         <>
             <div className="mb-4 flex flex-col md:mb-8 md:flex-row md:items-center md:justify-between">
                 <Header title='Project Details' subtitle='View the details of the project.' />
                 <div className="flex items-center gap-4">
-                    <Button
-                        // onClick={() => {
-                        //     if (userName) {
-                        //         setName(userName);
-                        //         setIsEditing(false);
-                        //     }
-                        // }}
-                        className="grow px-8 md:grow-0"
-                    >
-                        <span className="font-bold">Edit project</span>
-                    </Button>
+                    <EditProject projectData={projectData} refetch={refetch}/>
                     <Button
                         //onClick={handleProfileChanges}
                         className="grow px-8 md:grow-0"

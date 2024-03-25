@@ -42,7 +42,7 @@ const AddProjectMembers = ({
 
   return (
     <div className="flex items-center gap-4">
-      <Label>Select Project Members ( {project.members.length} )</Label>
+      <Label>Select Project Members ( {project?.members?.length} )</Label>
 
       <div ref={selectProjectMembersRef} className="relative">
         <button
@@ -60,7 +60,7 @@ const AddProjectMembers = ({
           )}
         >
           {allTeamMembers?.map((k) => {
-            const isSelectedMember = project.members.find(
+            const isSelectedMember = project?.members?.find(
               (l: any) => l.id === k.member.id,
             );
             return (
@@ -94,7 +94,7 @@ const AddProjectMembers = ({
         </div>
       </div>
       <div className="my-4 flex items-center gap-4">
-        {project.members.map((k: any) => {
+        {project?.members?.map((k: any) => {
           return (
             <TooltipProvider>
               <Tooltip>
