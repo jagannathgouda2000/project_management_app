@@ -33,7 +33,6 @@ export function AddMember({requestRefetch}:{requestRefetch:any}) {
         toast({ title: "Request sent successfully" });
       })
       .catch((err: any) => {
-        console.log(err);
         toast({
           title: "Unexpected error",
           description: err.message,
