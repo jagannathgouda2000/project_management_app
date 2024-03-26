@@ -109,7 +109,7 @@ model Project {
         title       String
         description String?  @default("")
         assignedTo  User[]
-        priority    String   @default("low") // can be 'low', 'medium or "high"
+        priority    String   @default("Low") // can be 'Low', 'Medium or "High"
         status      String   @default("Not Started") // can be "Not Started" or "In Progress" or "Review" or "Done" 
         Project     Project  @relation(fields: [projectId], references: [id])
         projectId   String

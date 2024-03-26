@@ -92,11 +92,10 @@ const AddProjectMembers = ({
       <div className="my-4 flex items-center gap-4">
         {project?.members?.map((k: any) => {
           return (
-            <TooltipProvider>
+            <TooltipProvider key={k.id}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Image
-                    key={k.id}
                     alt=""
                     width={48}
                     height={48}
