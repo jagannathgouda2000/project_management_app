@@ -25,7 +25,7 @@ const Dashboard = () => {
     api.project.getAllProjectDetails.useQuery();
   if (isLoadingUser) return <div>Loading...</div>;
   if (!data) return <UserNotFound />;
-  const {data:projectData} = api.project.getAllProjectDetails.useQuery();
+  
   return (
     <div className="">
       <div className="mb-4 md:mb-10">

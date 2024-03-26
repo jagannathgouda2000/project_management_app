@@ -102,4 +102,18 @@ export const taskRouter = createTRPCRouter({
       });
       return response;
     }),
+  getTaskByUserId: protectedProcedure.query(async({ctx}) => {
+    const user = ctx.session.user;
+    const response = await ctx.db.task.findMany({
+      where: {
+        assignedTo: {
+          some: {
+            id: user.id, // Check if at least one user object in assignedTo has matching id
+          },
+        },
+      },
+    });
+    console.log(response);
+    return response;
+  })
 });

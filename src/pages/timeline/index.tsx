@@ -1,14 +1,22 @@
 import UserNotFound from "@/components/commonItems/UserNotFound";
 import Layout from "@/components/layout/Layout";
+import Timelinepage from "@/components/timeline/timeline";
 import { getServerAuthSession } from "@/server/auth";
+import { api } from "@/utils/api";
 import { GetServerSidePropsContext } from "next";
 import { useSession } from "next-auth/react";
 import React, { ReactElement } from "react";
 
 const Timeline = () => {
   const { data } = useSession();
+  const {data:taskData, isLoading } = api.task.getTaskByUserId.useQuery();
   if (!data) return <UserNotFound />;
-  return <div>Timeline</div>;
+  
+  if(isLoading) return <p>Loading....</p>
+  return (
+    <Timelinepage taskData={taskData}/>
+  )
+   
 };
 
 Timeline.getLayout = function getLayout(page: ReactElement) {
