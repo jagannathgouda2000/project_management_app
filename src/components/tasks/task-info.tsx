@@ -2,24 +2,42 @@ import React from 'react'
 import { Card, CardContent } from '../ui/card'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip'
 import Image from 'next/image'
+import EditTask from './edit-task'
+import { Button } from '../ui/button'
+import { api } from '@/utils/api'
+import { toast } from '../ui/use-toast'
 
-const ProjectInfo = ({ title, description, members }: { title: string, description: string | null, members: any }) => {
+
+const TaskInfo = ({ task, refetch, project }: { task: any, refetch: () => void, project: any }) => {
+    const deleteTaskMutation = api.task.deleteTaskById.useMutation();
+
+    async function deleteTask(id: string) {
+        await deleteTaskMutation.mutateAsync({ id: id })
+            .then(() => {
+                toast({ title: "Task Deleted." });
+                refetch();
+            }).catch((err) => {
+                toast({
+                    title: "Unexpected error",
+                    description: err.message,
+                    variant: "destructive",
+                });
+            })
+    }
     return (
-        <Card className="flex w-1/2 m-2 pt-3">
-            <CardContent className="font-medium">
+        <Card className="w-full m-2 pt-3">
+            <CardContent className="w-full">
                 <div >
-                    <p className='text-sm text-muted-foreground'>Title</p>
-                    <p className="mb-2 text-lg">
-                        {title}
+                    <p className="text-sm font-medium leading-none mb-2">
+                        {task.title}
                     </p>
-                    <p className="text-sm text-muted-foreground">Description</p>
-                    <p className='text-lg'>
-                        {description}
+                    <p className="text-sm text-muted-foreground">
+                        {task.description}
                     </p>
-                        <p className='text-muted-foreground mt-2'>Project members :   </p>
-                    {members.length > 0 && (
+
+                    {task.assignedTo.length > 0 && (
                         <div className="my-2 flex items-center gap-4">
-                            {members.map((k: any) => {
+                            {task.assignedTo.map((k: any) => {
                                 return (
                                     <TooltipProvider key={k.id}>
                                         <Tooltip>
@@ -42,11 +60,14 @@ const ProjectInfo = ({ title, description, members }: { title: string, descripti
                             })}
                         </div>
                     )}
-
+                    <div className="flex justify-between mt-3">
+                        <EditTask project={project} refetch={refetch} data={task} />
+                        <Button onClick={() => deleteTask(task.id)}>Delete</Button>
+                    </div>
                 </div>
             </CardContent>
         </Card>
     )
 }
 
-export default ProjectInfo
+export default TaskInfo

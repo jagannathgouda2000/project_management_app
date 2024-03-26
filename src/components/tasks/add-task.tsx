@@ -17,6 +17,10 @@ import useOutsideClick from "@/hooks/use-outside-click";
 import { Calendar } from "../ui/calendar";
 import { format } from "date-fns";
 import DatePicker from "../commonItems/DatePicker";
+import AddProjectMembers from "../project/add-project-member";
+import { Project } from "@prisma/client";
+import { api } from "@/utils/api";
+import { toast } from "../ui/use-toast";
 
 export const TASK_STATUS_OPTIONS = [
   "Not Started",
@@ -91,11 +95,62 @@ const initTaskState = {
   deadline: new Date(),
 };
 
-const AddTask = () => {
+const AddTask = ({ project, refetch }: { project: any, refetch: () => void }) => {
   const [task, setTask] = useState(initTaskState);
-
+  const addTaskMutation = api.task.createTask.useMutation();
   function resetForm() {
     setTask(initTaskState);
+  }
+
+  function updateSelectedProjectMembers(member: any) {
+    if (task.assignedTo.find((k: any) => k.id === member.id)) {
+      setTask((prev: any) => ({
+        ...prev,
+        assignedTo: prev.assignedTo.filter((k: any) => k.id !== member.id),
+      }));
+    } else {
+      setTask((prev: any) => ({
+        ...prev,
+        assignedTo: [...prev.assignedTo, member],
+      }));
+    }
+  }
+
+  async function handleCreateTask() {
+    console.log(task)
+    if (!task.title || !task.description || task.assignedTo.length == 0) {
+      toast({
+        title: "Unexpected error",
+        description: "Fill all required fields",
+        variant: "destructive",
+      });
+      return
+    };
+    await addTaskMutation
+      .mutateAsync({
+        title: task.title.trim(),
+        description: task.description.trim(),
+        assignedTo: task.assignedTo.map((k: any) => k.id),
+        deadline: task.deadline,
+        priority: task.priority,
+        status: task.status,
+        projectId: project.id
+      })
+      .then((res: any) => {
+        toast({ title: "Task Created." });
+        console.log("done");
+      })
+      .catch((err: any) => {
+        toast({
+          title: "Unexpected error",
+          description: err.message,
+          variant: "destructive",
+        });
+      })
+      .finally(() => {
+        resetForm();
+        refetch();
+      });
   }
 
   return (
@@ -117,7 +172,7 @@ const AddTask = () => {
         <div className="">
           <Label>
             Title
-            <Input type="text" placeholder="Add a title" />
+            <Input type="text" placeholder="Add a title" onChange={(e) => setTask((prev) => ({ ...prev, title: e.target.value }))} />
           </Label>
         </div>
         <div className="flex items-center gap-4">
@@ -148,17 +203,23 @@ const AddTask = () => {
 
         <div>
           <p className="text-sm font-medium">Assigned To</p>
+          <AddProjectMembers
+            project={task}
+            updateSelectedProjectMembers={updateSelectedProjectMembers}
+            task={true}
+            members={project.members}
+          />
         </div>
         <div className="">
           <Label>
             Description
-            <Input type="text" placeholder="Add a description" />
+            <Input type="text" placeholder="Add a description" onChange={(e) => setTask((prev) => ({ ...prev, description: e.target.value }))} />
           </Label>
         </div>
 
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Create Task</AlertDialogAction>
+          <AlertDialogAction onClick={handleCreateTask}>Create Task</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -44,7 +44,7 @@ export const taskRouter = createTRPCRouter({
         id: z.string().min(1),
         title: z.string().min(1),
         description: z.string(),
-        assignedTo: z.array(z.string()),
+        assignedTo: z.array(z.string()).min(1),
         priority: z.string(),
         status: z.string().min(1),
         projectId: z.string().min(1),
@@ -66,7 +66,7 @@ export const taskRouter = createTRPCRouter({
           priority: input.priority,
           projectId: input.projectId,
           assignedTo: {
-            connect: input.assignedTo.map((k) => ({ id: k })),
+            set: input.assignedTo.map((k) => ({ id: k })),
           },
         },
       });
