@@ -15,7 +15,7 @@ export const taskRouter = createTRPCRouter({
         description: z.string(),
         assignedTo: z.array(z.string()),
         priority: z.string(),
-        status: z.string().min(1),
+        status: z.string(),
         projectId: z.string().min(1),
         deadline: z.any(),
       }),
