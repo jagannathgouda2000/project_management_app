@@ -112,6 +112,13 @@ export const taskRouter = createTRPCRouter({
           },
         },
       },
+      include:{
+        Project: true,
+        assignedTo:true
+      },
+      orderBy:{
+        deadline: "asc"
+      }
     });
     return response;
   })
