@@ -1,3 +1,4 @@
+import Header from "@/components/commonItems/Header";
 import UserNotFound from "@/components/commonItems/UserNotFound";
 import Layout from "@/components/layout/Layout";
 import Timelinepage from "@/components/timeline/timeline";
@@ -9,14 +10,18 @@ import React, { ReactElement } from "react";
 
 const Timeline = () => {
   const { data } = useSession();
-  const {data:taskData, isLoading } = api.task.getTaskByUserId.useQuery();
+  const { data: taskData, isLoading } = api.task.getTaskByUserId.useQuery();
   if (!data) return <UserNotFound />;
-  
-  if(isLoading) return <p>Loading....</p>
+
+  if (isLoading) return <p>Loading....</p>
   return (
-    <Timelinepage taskData={taskData}/>
+    <>
+      <Header title="Timeline" subtitle="Timeline of your tasks." />
+      {taskData && <Timelinepage taskData={taskData} />}
+      {!taskData && <div className="text-center">No tasks  found.</div>}
+    </>
   )
-   
+
 };
 
 Timeline.getLayout = function getLayout(page: ReactElement) {
