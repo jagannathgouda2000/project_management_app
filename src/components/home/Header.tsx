@@ -9,7 +9,7 @@ const Header = () => {
                     <p className="p-large mb-8">Start getting things done together with your team based on PM BUDDY's revolutionary team management features</p>
                 </div>
                 <div className="xl:text-right">
-                    <img className="inline" src="images/main.svg" alt="alternative" />
+                    <img className="inline" src="images/image3.svg" alt="alternative" />
                 </div>
             </div>
         </header>
