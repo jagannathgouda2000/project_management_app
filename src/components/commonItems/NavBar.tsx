@@ -17,7 +17,7 @@ export default function Navbar() {
   const { data } = useSession();
   const user = data?.user;
   return (
-    <nav className="sticky top-4 z-10 col-span-full flex h-[60px] w-full items-center justify-center rounded-full bg-white/30 py-2 backdrop-blur-md md:px-4">
+    <nav className="sticky md:mx-8 top-4 z-10 col-span-full flex h-[60px] items-center justify-center rounded-full bg-white/30 py-2 backdrop-blur-md md:px-4">
       <div className="container mx-auto flex items-center justify-between">
         <Link href="/">
           <div className="flex gap-3">
@@ -27,7 +27,7 @@ export default function Navbar() {
         </Link>
 
         <div className="flex items-center justify-end gap-2">
-          {NAV_ITEMS.map((item) => {
+          {user && NAV_ITEMS.map((item) => {
             const Icon = item.icon;
             return (
               <div

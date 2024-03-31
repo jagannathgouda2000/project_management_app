@@ -18,8 +18,10 @@ export default function Home() {
         <Introduction />
         <Features/>    
         <TopClients />
-        
+        <div className="mt-44">
+
         <Footer />
+        </div>
       </div>
     </>
   );
