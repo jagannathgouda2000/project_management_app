@@ -32,11 +32,11 @@ npm install  # Example for a Node.js project using npm
 
 
 ![Dashboard](https://github.com/jagannathgouda2000/project_management_app/blob/master/public/images/dashboard.png)
-![Homepage](https://project-management-app-xi-six.vercel.app/images/home)
-![Conections](https://project-management-app-xi-six.vercel.app/images/members)
-![Profile](https://project-management-app-xi-six.vercel.app/images/profile)
-![Project Page](https://project-management-app-xi-six.vercel.app/images/project)
-![Timeline](https://project-management-app-xi-six.vercel.app/images/timeline)
+![Homepage](https://github.com/jagannathgouda2000/project_management_app/blob/master/public/images/home.png)
+![Conections](https://github.com/jagannathgouda2000/project_management_app/blob/master/public/images/members.png)
+![Profile](https://github.com/jagannathgouda2000/project_management_app/blob/master/public/images/profile.png)
+![Project Page](https://github.com/jagannathgouda2000/project_management_app/blob/master/public/images/project.png)
+![Timeline](https://github.com/jagannathgouda2000/project_management_app/blob/master/public/images/timeline.png)
 
 # Create T3 App
 
