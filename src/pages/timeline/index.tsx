@@ -17,8 +17,9 @@ const Timeline = () => {
   return (
     <>
       <Header title="Timeline" subtitle="Timeline of your tasks." />
-      {taskData && <Timelinepage taskData={taskData} />}
-      {!taskData && <div className="text-center">No tasks  found.</div>}
+      {taskData?.length == 0 && <div className="text-center">No tasks  found.</div>}
+      {taskData && taskData.length > 0 && <Timelinepage taskData={taskData} />}
+
     </>
   )
 
