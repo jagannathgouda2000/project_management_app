@@ -17,7 +17,7 @@ export function TopClients() {
         align: "start",
         loop : true
       }}
-      className="w-full"
+      className="w-full m-4"
     >
       <CarouselContent>
         {Array.from({ length: 7 }).map((_, index) => (
