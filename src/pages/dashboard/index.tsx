@@ -21,7 +21,7 @@ import { ReactElement } from "react";
 const Dashboard = () => {
   const { data, status } = useSession();
   const isLoadingUser = status === "loading";
-  const { data: projectsList, isLoading } =
+  const { data: projectsList, isLoading ,refetch } =
     api.project.getAllProjectDetails.useQuery();
   if (isLoadingUser) return <div>Loading...</div>;
   if (!data) return <UserNotFound />;
@@ -36,7 +36,7 @@ const Dashboard = () => {
           <h2 className="text-3xl">Projects</h2>
           <div className="text-gray-400">Manage your projects.</div>
         </div>
-        <AddProject />
+        <AddProject refetch={refetch}/>
       </div>
       <div className="mt-8">
         {projectsList?.length === 0 ? (

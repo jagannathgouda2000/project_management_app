@@ -20,7 +20,7 @@ import { useSession } from "next-auth/react";
 
 const defaultNewProjectState = { title: "", description: "", members: [] };
 
-export default function AddProject() {
+export default function AddProject({ refetch }: { refetch: () => void }) {
   const { data, status } = useSession();
   const userData = data?.user;
 
@@ -68,6 +68,7 @@ export default function AddProject() {
       })
       .then((res: any) => {
         toast({ title: "Project Created." });
+        refetch()
       })
       .catch((err: any) => {
         toast({
