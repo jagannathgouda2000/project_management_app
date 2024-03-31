@@ -14,7 +14,7 @@ export function TopClients() {
   return (
     <>
       <div className='text-center text-4xl font-bold'>
-        Well-versed in all your most-used programs.
+        Trusted by top brands
       </div>
       <Carousel
         opts={{
