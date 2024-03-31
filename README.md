@@ -31,7 +31,7 @@ npm install  # Example for a Node.js project using npm
 - run ``npm run db:push``` after making any changes in the prisma schema, incase of error try starting the development server again
 
 
-![Dashboard](https://drive.google.com/file/d/1YOFBewV_j2eeaDNCVEeoH1TcjQf-nFV5/view?usp=sharing)
+![Dashboard](https://github.com/jagannathgouda2000/project_management_app/blob/master/public/images/dashboard.png)
 ![Homepage](https://project-management-app-xi-six.vercel.app/images/home)
 ![Conections](https://project-management-app-xi-six.vercel.app/images/members)
 ![Profile](https://project-management-app-xi-six.vercel.app/images/profile)
